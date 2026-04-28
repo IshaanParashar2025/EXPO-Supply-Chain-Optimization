@@ -23,11 +23,6 @@ class MongoDB:
         db_name = parsed.path.lstrip('/').split('?')[0] or 'supplychain'
         self.db = self.client[db_name]
 
-        @app.teardown_appcontext
-        def close_connection(exception):
-            if self.client is not None:
-                self.client.close()
-
 
 cors = CORS(resources={r"/*": {"origins": "*"}})
 mongo = MongoDB()
