@@ -130,31 +130,95 @@ A full-stack Supply Chain Management & Optimization web application built with *
 
 ## Deployment
 
-### Frontend (Vercel)
+### Why No Data Shows on Vercel
 
-The repository includes a `vercel.json` configured to deploy the `frontend/` directory as a static site.
+**Vercel only hosts the frontend (HTML/CSS/JS).** The Flask backend API and MongoDB database are NOT included. You must deploy the backend separately and connect the two.
 
-1. Push this repo to GitHub
-2. Import the project on [Vercel](https://vercel.com)
-3. Vercel will automatically detect `vercel.json` and serve from the `frontend/` folder
-4. **Important:** Update the API URL for production by setting `window.API_BASE_URL` in `frontend/index.html` before the `<script src="./js/api.js">` tag:
+**Architecture:**
+```
+[Vercel: Static Frontend]  ←──API calls──→  [Render: Flask Backend]  ←──→  [MongoDB Atlas]
+```
+
+---
+
+### Step 1: Deploy Backend on Render (Free)
+
+1. **Get a MongoDB Atlas database** (free tier available at [mongodb.com](https://www.mongodb.com/cloud/atlas))
+   - Create a cluster → Database Access → Add user → Network Access → Allow from anywhere (`0.0.0.0/0`)
+   - Copy your connection string: `mongodb+srv://user:pass@cluster.mongodb.net/supplychain`
+
+2. **Push this repo to GitHub** (already done)
+
+3. **Go to [Render](https://render.com)** → **New Web Service** → Connect your GitHub repo
+   - **Name:** `expo-api` (or any name)
+   - **Region:** Choose closest to you
+   - **Branch:** `main`
+   - **Root Directory:** `backend`
+   - **Runtime:** Python 3
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `python run.py`
+   - **Plan:** Free
+
+4. **Add Environment Variables** in Render dashboard:
+   | Key | Value |
+   |-----|-------|
+   | `SECRET_KEY` | A random secret string |
+   | `MONGO_URI` | Your MongoDB Atlas connection string |
+   | `FLASK_DEBUG` | `False` |
+
+5. **Click Create Web Service**
+   - Wait for build to complete (2-3 minutes)
+   - Copy your Render URL: `https://expo-api.onrender.com`
+   - Visit `https://expo-api.onrender.com/` to confirm it's running
+
+---
+
+### Step 2: Deploy Frontend on Vercel
+
+1. **Go to [Vercel](https://vercel.com)** → **Add New Project** → Import your GitHub repo
+2. **Framework Preset:** Other
+3. **Root Directory:** `frontend` ⚠️ (This is critical - Vercel must look inside `frontend/` for `index.html`)
+4. Click **Deploy**
+
+---
+
+### Step 3: Connect Frontend to Backend
+
+1. **Edit `frontend/index.html`** in this repo
+2. **Add this line BEFORE the `<script src="./js/api.js">` tag:**
    ```html
-   <script>window.API_BASE_URL = 'https://your-backend-url.com/api';</script>
+   <script>window.API_BASE_URL = 'https://expo-api.onrender.com/api';</script>
+   ```
+   Replace `expo-api.onrender.com` with your actual Render URL (no trailing slash before `/api`).
+
+3. **Commit and push:**
+   ```bash
+   git add frontend/index.html
+   git commit -m "Connect frontend to deployed backend"
+   git push origin main
    ```
 
-### Backend (Render / Railway / PythonAnywhere)
+4. **Vercel will auto-redeploy** with the new URL
 
-The Flask backend requires a platform that supports persistent Python processes and MongoDB connections. Recommended options:
+---
 
-| Platform | Notes |
-|----------|-------|
-| **Render** | Free tier available; supports `requirements.txt` |
-| **Railway** | Easy MongoDB add-on; good for full-stack |
-| **PythonAnywhere** | Free tier; requires scheduled tasks for keep-alive |
+### Step 4: Seed the Database
 
-**Environment Variables to Set:**
-- `SECRET_KEY`
-- `MONGO_URI` (use MongoDB Atlas for cloud hosting)
+Once your backend is live, run the seeder to populate MongoDB Atlas with sample data:
+
+```bash
+# Locally, point to your Atlas database
+cd backend
+cp .env.example .env
+# Edit .env with your MONGO_URI
+python seed.py
+```
+
+Alternatively, use Render's **Shell** tab:
+```bash
+cd backend
+python seed.py
+```
 
 ---
 
