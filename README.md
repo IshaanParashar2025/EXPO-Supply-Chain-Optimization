@@ -38,7 +38,7 @@ A full-stack Supply Chain Management & Optimization web application built with *
 .
 ├── backend/
 │   ├── app/
-│   │   ├── __init__.py          # Flask app factory
+│   │   ├── __init__.py          # Flask app factory (with auto-seeding)
 │   │   ├── config.py            # Configuration settings
 │   │   ├── extensions.py        # Flask extensions (CORS, MongoDB)
 │   │   ├── routes/              # API blueprints
@@ -54,7 +54,7 @@ A full-stack Supply Chain Management & Optimization web application built with *
 │   │       └── serializers.py   # BSON/JSON serialization helpers
 │   ├── requirements.txt
 │   ├── run.py                   # Entry point
-│   └── seed.py                  # Database seeder
+│   └── Procfile                 # Render deployment config
 ├── frontend/
 │   ├── index.html
 │   ├── css/
@@ -105,18 +105,15 @@ A full-stack Supply Chain Management & Optimization web application built with *
    # Edit .env with your actual values
    ```
 
-4. **Seed the database** (optional - creates sample data)
-   ```bash
-   python seed.py
-   ```
-
-5. **Run the backend server**
+4. **Run the backend server**
    ```bash
    python run.py
    ```
    The API will be available at `http://localhost:5000`
 
-6. **Serve the frontend**
+   > **Note:** The app automatically seeds the database with sample data on first startup if collections are empty. No manual seeding required!
+
+5. **Serve the frontend**
    
    Open `frontend/index.html` in your browser, or use a simple HTTP server:
    ```bash
@@ -166,10 +163,13 @@ A full-stack Supply Chain Management & Optimization web application built with *
    | `MONGO_URI` | Your MongoDB Atlas connection string |
    | `FLASK_DEBUG` | `False` |
 
+   > **Important:** Make sure your `MONGO_URI` includes the database name: `...mongodb.net/supplychain?retryWrites=true`
+
 5. **Click Create Web Service**
    - Wait for build to complete (2-3 minutes)
    - Copy your Render URL: `https://expo-api.onrender.com`
    - Visit `https://expo-api.onrender.com/` to confirm it's running
+   - The database will be **automatically seeded** on first startup!
 
 ---
 
@@ -199,26 +199,6 @@ A full-stack Supply Chain Management & Optimization web application built with *
    ```
 
 4. **Vercel will auto-redeploy** with the new URL
-
----
-
-### Step 4: Seed the Database
-
-Once your backend is live, run the seeder to populate MongoDB Atlas with sample data:
-
-```bash
-# Locally, point to your Atlas database
-cd backend
-cp .env.example .env
-# Edit .env with your MONGO_URI
-python seed.py
-```
-
-Alternatively, use Render's **Shell** tab:
-```bash
-cd backend
-python seed.py
-```
 
 ---
 

@@ -31,3 +31,4 @@ class MongoDB:
 
 cors = CORS(resources={r"/*": {"origins": "*"}})
 mongo = MongoDB()
+
