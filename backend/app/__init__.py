@@ -138,12 +138,20 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     app.url_map.strict_slashes = False  # Match Express behavior
 
+    # Validate config
+    is_valid, error_msg = config_class.validate()
+    if not is_valid:
+        app.config['_CONFIG_ERROR'] = error_msg
+    else:
+        app.config['_CONFIG_ERROR'] = None
+
     # Initialize extensions
     cors.init_app(app)
     mongo.init_app(app)
 
     # Auto-seed if database is empty
-    _auto_seed()
+    if not app.config['_CONFIG_ERROR']:
+        _auto_seed()
 
     # Register blueprints
     app.register_blueprint(suppliers.bp, url_prefix='/api/suppliers')
@@ -156,7 +164,15 @@ def create_app(config_class=Config):
 
     @app.route('/')
     def health_check():
+        if app.config.get('_CONFIG_ERROR'):
+            return {'status': 'error', 'message': app.config['_CONFIG_ERROR']}, 503
         return {'message': '\U0001f69a Supply Chain MVC API Running on port 5000'}
+
+    @app.before_request
+    def check_config():
+        if app.config.get('_CONFIG_ERROR'):
+            from flask import jsonify, request
+            return jsonify({'success': False, 'error': app.config['_CONFIG_ERROR']}), 503
 
     @app.errorhandler(Exception)
     def handle_exception(error):
