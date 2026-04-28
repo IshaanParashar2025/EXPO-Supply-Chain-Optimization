@@ -3,17 +3,16 @@ from datetime import datetime
 from flask import Blueprint, request, jsonify
 from bson import ObjectId
 
-from app.database import get_db
+from app.extensions import mongo
 from app.utils import serialize_doc
 
 bp = Blueprint('orders', __name__)
 
 
 def _populate_order_refs(orders):
-    db = get_db()
     for o in orders:
         if o.get('supplier_id'):
-            sup = db.suppliers.find_one(
+            sup = mongo.db.suppliers.find_one(
                 {'_id': ObjectId(o['supplier_id'])}, {'name': 1}
             )
             if sup:
@@ -22,7 +21,7 @@ def _populate_order_refs(orders):
                     'name': sup.get('name'),
                 }
         if o.get('inventory_id'):
-            inv = db.inventory.find_one(
+            inv = mongo.db.inventory.find_one(
                 {'_id': ObjectId(o['inventory_id'])},
                 {'product_name': 1, 'sku': 1},
             )
@@ -37,18 +36,15 @@ def _populate_order_refs(orders):
 
 @bp.route('/', methods=['GET'])
 def get_orders():
-    db = get_db()
-    orders = list(db.orders.find().sort('order_date', -1))
+    orders = list(mongo.db.orders.find().sort('order_date', -1))
     orders = _populate_order_refs(orders)
     return jsonify(serialize_doc(orders))
 
 
 @bp.route('/', methods=['POST'])
 def create_order():
-    db = get_db()
     data = request.get_json()
     data['order_date'] = datetime.utcnow()
-    result = db.orders.insert_one(data)
-    created = db.orders.find_one({'_id': result.inserted_id})
+    result = mongo.db.orders.insert_one(data)
+    created = mongo.db.orders.find_one({'_id': result.inserted_id})
     return jsonify(serialize_doc(created)), 201
-

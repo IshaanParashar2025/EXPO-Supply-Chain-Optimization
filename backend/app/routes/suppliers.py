@@ -21,4 +21,3 @@ def create_supplier():
     result = mongo.db.suppliers.insert_one(data)
     created = mongo.db.suppliers.find_one({'_id': result.inserted_id})
     return jsonify(serialize_doc(created)), 201
-
