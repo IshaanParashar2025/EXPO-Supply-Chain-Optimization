@@ -128,6 +128,36 @@ A full-stack Supply Chain Management & Optimization web application built with *
 
 ---
 
+## Deployment
+
+### Frontend (Vercel)
+
+The repository includes a `vercel.json` configured to deploy the `frontend/` directory as a static site.
+
+1. Push this repo to GitHub
+2. Import the project on [Vercel](https://vercel.com)
+3. Vercel will automatically detect `vercel.json` and serve from the `frontend/` folder
+4. **Important:** Update the API URL for production by setting `window.API_BASE_URL` in `frontend/index.html` before the `<script src="./js/api.js">` tag:
+   ```html
+   <script>window.API_BASE_URL = 'https://your-backend-url.com/api';</script>
+   ```
+
+### Backend (Render / Railway / PythonAnywhere)
+
+The Flask backend requires a platform that supports persistent Python processes and MongoDB connections. Recommended options:
+
+| Platform | Notes |
+|----------|-------|
+| **Render** | Free tier available; supports `requirements.txt` |
+| **Railway** | Easy MongoDB add-on; good for full-stack |
+| **PythonAnywhere** | Free tier; requires scheduled tasks for keep-alive |
+
+**Environment Variables to Set:**
+- `SECRET_KEY`
+- `MONGO_URI` (use MongoDB Atlas for cloud hosting)
+
+---
+
 ## API Endpoints
 
 | Endpoint | Method | Description |
