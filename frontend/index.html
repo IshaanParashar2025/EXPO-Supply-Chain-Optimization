@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EXPO's Supply Chain Optimization</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loader">
+  <svg width="90" height="90" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 16px rgba(204,26,26,1));animation:spin 4s linear infinite">
+    <circle cx="100" cy="100" r="95" fill="none" stroke="#cc1a1a" stroke-width="10"/>
+    <line x1="100" y1="5" x2="65" y2="38" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="100" y1="5" x2="135" y2="38" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="100" y1="195" x2="65" y2="162" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="100" y1="195" x2="135" y2="162" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="5" y1="100" x2="38" y2="65" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="5" y1="100" x2="38" y2="135" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="195" y1="100" x2="162" y2="65" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="195" y1="100" x2="162" y2="135" stroke="#c0c8d0" stroke-width="7"/>
+    <line x1="12" y1="100" x2="188" y2="100" stroke="#cc1a1a" stroke-width="8"/>
+    <polygon points="100,42 155,140 45,140" fill="none" stroke="#cc1a1a" stroke-width="8" stroke-linejoin="round"/>
+    <polygon points="100,128 72,80 128,80" fill="none" stroke="#c0c8d0" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="100" cy="100" r="14" fill="#cc1a1a" opacity="0.9"/>
+    <circle cx="100" cy="100" r="8" fill="#ffffff" opacity="0.95"/>
+  </svg>
+  <style>@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }</style>
+  <div class="loading-logo">
+    <span style="color:var(--accent2)">EXPO'S</span><br>
+    <span style="color:var(--accent);font-size:0.9rem;letter-spacing:5px;">SUPPLY CHAIN OPTIMIZATION</span>
+  </div>
+  <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
+  <div class="loading-text">INITIALIZING JARVIS SUPPLY CHAIN PROTOCOL...</div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon" style="background:transparent;border:none;clip-path:none;width:48px;height:48px;display:flex;align-items:center;justify-content:center;">
+      <svg width="46" height="46" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 0 8px rgba(204,26,26,0.9))">
+        <circle cx="100" cy="100" r="95" fill="none" stroke="#cc1a1a" stroke-width="10"/>
+        <line x1="100" y1="5" x2="65" y2="38" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="100" y1="5" x2="135" y2="38" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="100" y1="195" x2="65" y2="162" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="100" y1="195" x2="135" y2="162" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="5" y1="100" x2="38" y2="65" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="5" y1="100" x2="38" y2="135" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="195" y1="100" x2="162" y2="65" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="195" y1="100" x2="162" y2="135" stroke="#c0c8d0" stroke-width="7"/>
+        <line x1="12" y1="100" x2="188" y2="100" stroke="#cc1a1a" stroke-width="8"/>
+        <polygon points="100,42 155,140 45,140" fill="none" stroke="#cc1a1a" stroke-width="8" stroke-linejoin="round"/>
+        <polygon points="100,128 72,80 128,80" fill="none" stroke="#c0c8d0" stroke-width="6" stroke-linejoin="round"/>
+        <circle cx="100" cy="100" r="14" fill="#cc1a1a" opacity="0.9"/>
+        <circle cx="100" cy="100" r="8" fill="#ffffff" opacity="0.95"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text"><span style="color:var(--accent2)">EXPO'S</span> <span style="color:var(--accent)">SCO</span></div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:0.55rem;color:var(--text-dim);letter-spacing:2px;">SUPPLY CHAIN OPTIMIZATION</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-dot">JARVIS ONLINE</div>
+    <div class="version-tag">MARK II</div>
+  </div>
+</header>
+
+<div class="app-layout">
+  <nav class="sidebar">
+    <div class="nav-section">
+      <div class="nav-label">Overview</div>
+      <div class="nav-item active" onclick="showPage('dashboard', this)"><span class="nav-icon">⚙</span> Dashboard</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Entities</div>
+      <div class="nav-item" onclick="showPage('suppliers', this)"><span class="nav-icon">🏭</span> Suppliers</div>
+      <div class="nav-item" onclick="showPage('manufacturers', this)"><span class="nav-icon">⚙️</span> Manufacturers</div>
+      <div class="nav-item" onclick="showPage('distributors', this)"><span class="nav-icon">🚛</span> Distributors</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Operations</div>
+      <div class="nav-item" onclick="showPage('inventory', this)"><span class="nav-icon">📦</span> Inventory</div>
+      <div class="nav-item" onclick="showPage('orders', this)"><span class="nav-icon">📋</span> Orders</div>
+      <div class="nav-item" onclick="showPage('logistics', this)"><span class="nav-icon">🗺️</span> Logistics</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Intelligence</div>
+      <div class="nav-item" onclick="showPage('optimize', this)"><span class="nav-icon">🧠</span> Optimization</div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <div class="page active" id="dashboard">
+      <div class="page-header">
+        <div>
+          <div class="page-title">COMMAND CENTER</div>
+          <div class="page-subtitle">// real-time supply chain overview</div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="dash-stats">
+        <div class="stat-card"><div class="stat-label">Suppliers</div><div class="stat-value" id="stat-suppliers">—</div><div class="stat-sub">Active vendors</div></div>
+        <div class="stat-card"><div class="stat-label">Manufacturers</div><div class="stat-value" id="stat-manufacturers">—</div><div class="stat-sub">Production units</div></div>
+        <div class="stat-card"><div class="stat-label">Inventory Items</div><div class="stat-value" id="stat-inventory">—</div><div class="stat-sub">SKUs tracked</div></div>
+        <div class="stat-card"><div class="stat-label">Open Orders</div><div class="stat-value" id="stat-orders">—</div><div class="stat-sub">Pending fulfillment</div></div>
+        <div class="stat-card"><div class="stat-label">Low Stock Alerts</div><div class="stat-value" id="stat-lowstock" style="color:var(--red)">—</div><div class="stat-sub">Below reorder point</div></div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚠ Active Alerts</div></div>
+          <div class="card-body" id="dash-alerts">Loading...</div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">📊 Inventory by Category</div></div>
+          <div class="card-body">
+            <div class="chart-bar-wrap" id="dash-chart">Loading...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">📋 Recent Orders</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="dash-orders-table">
+              <thead><tr><th>Order ID</th><th>Supplier</th><th>Product</th><th>Qty</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPLIERS -->
+    <div class="page" id="suppliers">
+      <div class="page-header">
+        <div><div class="page-title">SUPPLIERS</div><div class="page-subtitle">// vendor management & performance</div></div>
+        <button class="btn btn-primary" onclick="toggleForm('supplier-form')">+ Add Supplier</button>
+      </div>
+      <div class="card" id="supplier-form" style="display:none;">
+        <div class="card-header"><div class="card-title">New Supplier</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Company Name *</label><input class="form-input" id="sup-name" placeholder="ACME Corp"></div>
+            <div class="form-group"><label class="form-label">Contact Person</label><input class="form-input" id="sup-contact" placeholder="John Doe"></div>
+            <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="sup-email" type="email" placeholder="contact@acme.com"></div>
+            <div class="form-group"><label class="form-label">Phone</label><input class="form-input" id="sup-phone" placeholder="+1-555-0000"></div>
+            <div class="form-group"><label class="form-label">Country</label><input class="form-input" id="sup-country" placeholder="USA"></div>
+            <div class="form-group"><label class="form-label">Reliability Rating (1-10)</label><input class="form-input" id="sup-rating" type="number" min="1" max="10" placeholder="8"></div>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <button class="btn btn-primary" onclick="addSupplier()">💾 Save Supplier</button>
+            <button class="btn btn-ghost" onclick="toggleForm('supplier-form')">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Suppliers</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="suppliers-table">
+              <thead><tr><th>ID</th><th>Name</th><th>Contact</th><th>Email</th><th>Country</th><th>Rating</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANUFACTURERS -->
+    <div class="page" id="manufacturers">
+      <div class="page-header">
+        <div><div class="page-title">MANUFACTURERS</div><div class="page-subtitle">// production facility management</div></div>
+        <button class="btn btn-primary" onclick="toggleForm('mfr-form')">+ Add Manufacturer</button>
+      </div>
+      <div class="card" id="mfr-form" style="display:none;">
+        <div class="card-header"><div class="card-title">New Manufacturer</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Facility Name *</label><input class="form-input" id="mfr-name" placeholder="Nexus Factory A"></div>
+            <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="mfr-location" placeholder="Detroit, MI"></div>
+            <div class="form-group"><label class="form-label">Capacity (units/day)</label><input class="form-input" id="mfr-capacity" type="number" placeholder="5000"></div>
+            <div class="form-group"><label class="form-label">Production Type</label><input class="form-input" id="mfr-type" placeholder="Electronics"></div>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <button class="btn btn-primary" onclick="addManufacturer()">💾 Save</button>
+            <button class="btn btn-ghost" onclick="toggleForm('mfr-form')">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Manufacturers</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="manufacturers-table">
+              <thead><tr><th>ID</th><th>Name</th><th>Location</th><th>Capacity/Day</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISTRIBUTORS -->
+    <div class="page" id="distributors">
+      <div class="page-header">
+        <div><div class="page-title">DISTRIBUTORS</div><div class="page-subtitle">// distribution network management</div></div>
+        <button class="btn btn-primary" onclick="toggleForm('dist-form')">+ Add Distributor</button>
+      </div>
+      <div class="card" id="dist-form" style="display:none;">
+        <div class="card-header"><div class="card-title">New Distributor</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Company Name *</label><input class="form-input" id="dist-name" placeholder="FastShip Ltd"></div>
+            <div class="form-group"><label class="form-label">Region Covered</label><input class="form-input" id="dist-region" placeholder="North America"></div>
+            <div class="form-group"><label class="form-label">Warehouse Count</label><input class="form-input" id="dist-warehouses" type="number" placeholder="12"></div>
+            <div class="form-group"><label class="form-label">Max Load (tons)</label><input class="form-input" id="dist-maxload" type="number" placeholder="500"></div>
+            <div class="form-group"><label class="form-label">Delivery SLA (days)</label><input class="form-input" id="dist-sla" type="number" placeholder="3"></div>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <button class="btn btn-primary" onclick="addDistributor()">💾 Save</button>
+            <button class="btn btn-ghost" onclick="toggleForm('dist-form')">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">All Distributors</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="distributors-table">
+              <thead><tr><th>ID</th><th>Name</th><th>Region</th><th>Warehouses</th><th>Max Load (t)</th><th>SLA (days)</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div class="page" id="inventory">
+      <div class="page-header">
+        <div><div class="page-title">INVENTORY</div><div class="page-subtitle">// stock levels & replenishment</div></div>
+        <button class="btn btn-primary" onclick="toggleForm('inv-form')">+ Add Item</button>
+      </div>
+      <div class="card" id="inv-form" style="display:none;">
+        <div class="card-header"><div class="card-title">New Inventory Item</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Product Name *</label><input class="form-input" id="inv-name" placeholder="Widget X-200"></div>
+            <div class="form-group"><label class="form-label">SKU</label><input class="form-input" id="inv-sku" placeholder="WGT-X200"></div>
+            <div class="form-group"><label class="form-label">Category</label><input class="form-input" id="inv-category" placeholder="Electronics"></div>
+            <div class="form-group"><label class="form-label">Current Stock *</label><input class="form-input" id="inv-stock" type="number" placeholder="1000"></div>
+            <div class="form-group"><label class="form-label">Reorder Point</label><input class="form-input" id="inv-reorder" type="number" placeholder="200"></div>
+            <div class="form-group"><label class="form-label">Max Capacity</label><input class="form-input" id="inv-maxcap" type="number" placeholder="5000"></div>
+            <div class="form-group"><label class="form-label">Unit Cost ($)</label><input class="form-input" id="inv-cost" type="number" step="0.01" placeholder="12.50"></div>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <button class="btn btn-primary" onclick="addInventory()">💾 Save</button>
+            <button class="btn btn-ghost" onclick="toggleForm('inv-form')">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Stock Levels</div>
+          <button class="btn btn-ghost btn-sm" onclick="runReplenishment()">🔄 Auto-Replenish Low Stock</button>
+        </div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="inventory-table">
+              <thead><tr><th>ID</th><th>Product</th><th>SKU</th><th>Category</th><th>Stock</th><th>Reorder Pt</th><th>Max Cap</th><th>Status</th><th>Unit Cost</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="page" id="orders">
+      <div class="page-header">
+        <div><div class="page-title">ORDERS</div><div class="page-subtitle">// purchase order management</div></div>
+        <button class="btn btn-primary" onclick="toggleForm('order-form')">+ New Order</button>
+      </div>
+      <div class="card" id="order-form" style="display:none;">
+        <div class="card-header"><div class="card-title">New Purchase Order</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Supplier *</label><select class="form-select" id="ord-supplier"><option value="">— Select Supplier —</option></select></div>
+            <div class="form-group"><label class="form-label">Inventory Item *</label><select class="form-select" id="ord-item"><option value="">— Select Item —</option></select></div>
+            <div class="form-group"><label class="form-label">Quantity *</label><input class="form-input" id="ord-qty" type="number" placeholder="500"></div>
+            <div class="form-group"><label class="form-label">Unit Price ($)</label><input class="form-input" id="ord-price" type="number" step="0.01" placeholder="12.00"></div>
+            <div class="form-group"><label class="form-label">Priority</label>
+              <select class="form-select" id="ord-priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+                <option value="critical">Critical</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Expected Delivery Date</label><input class="form-input" id="ord-date" type="date"></div>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <button class="btn btn-primary" onclick="addOrder()">💾 Place Order</button>
+            <button class="btn btn-ghost" onclick="toggleForm('order-form')">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Order Log</div></div>
+        <div class="card-body">
+          <div class="tabs">
+            <div class="tab active" onclick="filterOrders('all', this)">All</div>
+            <div class="tab" onclick="filterOrders('pending', this)">Pending</div>
+            <div class="tab" onclick="filterOrders('processing', this)">Processing</div>
+            <div class="tab" onclick="filterOrders('shipped', this)">Shipped</div>
+            <div class="tab" onclick="filterOrders('delivered', this)">Delivered</div>
+          </div>
+          <div class="table-wrap">
+            <table id="orders-table">
+              <thead><tr><th>ID</th><th>Supplier</th><th>Product</th><th>Qty</th><th>Total ($)</th><th>Priority</th><th>Status</th><th>Delivery</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGISTICS -->
+    <div class="page" id="logistics">
+      <div class="page-header">
+        <div><div class="page-title">LOGISTICS</div><div class="page-subtitle">// transportation & delivery tracking</div></div>
+        <button class="btn btn-primary" onclick="toggleForm('log-form')">+ Add Shipment</button>
+      </div>
+      <div class="card" id="log-form" style="display:none;">
+        <div class="card-header"><div class="card-title">New Shipment</div></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group"><label class="form-label">Order ID *</label><select class="form-select" id="log-order"><option value="">— Select Order —</option></select></div>
+            <div class="form-group"><label class="form-label">Distributor *</label><select class="form-select" id="log-distributor"><option value="">— Select Distributor —</option></select></div>
+            <div class="form-group"><label class="form-label">Carrier</label><input class="form-input" id="log-carrier" placeholder="FedEx Freight"></div>
+            <div class="form-group"><label class="form-label">Tracking Number</label><input class="form-input" id="log-tracking" placeholder="FX-20240101-XXXX"></div>
+            <div class="form-group"><label class="form-label">Origin</label><input class="form-input" id="log-origin" placeholder="Chicago, IL"></div>
+            <div class="form-group"><label class="form-label">Destination</label><input class="form-input" id="log-dest" placeholder="Miami, FL"></div>
+            <div class="form-group"><label class="form-label">Shipping Cost ($)</label><input class="form-input" id="log-cost" type="number" step="0.01" placeholder="1200"></div>
+            <div class="form-group"><label class="form-label">Mode</label>
+              <select class="form-select" id="log-mode">
+                <option value="road">Road</option>
+                <option value="rail">Rail</option>
+                <option value="air">Air</option>
+                <option value="sea">Sea</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:0.75rem;">
+            <button class="btn btn-primary" onclick="addLogistics()">💾 Create Shipment</button>
+            <button class="btn btn-ghost" onclick="toggleForm('log-form')">Cancel</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Active Shipments</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="logistics-table">
+              <thead><tr><th>ID</th><th>Order</th><th>Carrier</th><th>Tracking</th><th>Origin → Dest</th><th>Mode</th><th>Cost ($)</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPTIMIZATION -->
+    <div class="page" id="optimize">
+      <div class="page-header">
+        <div><div class="page-title">OPTIMIZATION ENGINE</div><div class="page-subtitle">// intelligent supply chain analytics</div></div>
+        <button class="btn btn-primary" onclick="runAllOptimizations()">▶ Run All Queries</button>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">🔄 Inventory Replenishment Candidates</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="opt-replenishment">
+              <thead><tr><th>Product</th><th>SKU</th><th>Current Stock</th><th>Reorder Point</th><th>Suggested Order Qty</th></tr></thead>
+              <tbody><tr><td colspan="5" style="text-align:center;color:var(--text-dim);">Click "Run All Queries" to analyze</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card">
+          <div class="card-header"><div class="card-title">❌ Stockout Risk Items</div></div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table id="opt-stockout">
+                <thead><tr><th>Product</th><th>Stock</th><th>Risk Level</th></tr></thead>
+                <tbody><tr><td colspan="3" style="text-align:center;color:var(--text-dim);">Run analysis to view</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">💸 Transportation Cost Analysis</div></div>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table id="opt-transport">
+                <thead><tr><th>Mode</th><th>Shipments</th><th>Avg Cost ($)</th><th>Total ($)</th></tr></thead>
+                <tbody><tr><td colspan="4" style="text-align:center;color:var(--text-dim);">Run analysis to view</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">📦 Order Fulfillment Pipeline</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="opt-fulfillment">
+              <thead><tr><th>Status</th><th>Count</th><th>Total Value ($)</th></tr></thead>
+              <tbody><tr><td colspan="3" style="text-align:center;color:var(--text-dim);">Run analysis to view</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">🏆 Supplier Performance Score</div></div>
+        <div class="card-body">
+          <div class="table-wrap">
+            <table id="opt-suppliers">
+              <thead><tr><th>Supplier</th><th>Country</th><th>Orders</th><th>Reliability</th><th>Score</th></tr></thead>
+              <tbody><tr><td colspan="5" style="text-align:center;color:var(--text-dim);">Run analysis to view</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="./js/api.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/app.js"></script>
+
+</body>
+</html>
+
